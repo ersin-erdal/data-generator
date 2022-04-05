@@ -52,6 +52,17 @@ interface FixedValueGeneratorConfig {
   params: FixedValueGeneratorParams;
 }
 
+// sineWave ##########################################################
+export interface SineWaveGeneratorParams {
+  max: number;
+  min: number;
+  period: number;
+}
+interface SineWaveGeneratorConfig {
+  type: 'sineWave';
+  params: SineWaveGeneratorParams;
+}
+
 // ################################################################
 
 export type GeneratorTypes =
@@ -60,18 +71,19 @@ export type GeneratorTypes =
   | 'iso8601'
   | 'fixed'
   | 'randomInt'
-  | 'randomFloat';
+  | 'randomFloat'
+  | 'sineWave';
 
 export type GeneratorParams =
   | IsoGeneratorParams
   | RandomIntGeneratorParams
   | RandomFloatGeneratorParams
   | DictionaryGeneratorParams
+  | SineWaveGeneratorParams
   | FixedValueGeneratorParams;
 
 export interface CustomIndexGeneratorConfig {
   interval: number;
-  version: string;
   indexName: string;
   doc: {
     [key: string]:
@@ -80,6 +92,11 @@ export interface CustomIndexGeneratorConfig {
       | UuidGeneratorConfig
       | RandomIntGeneratorConfig
       | RandomFloatGeneratorConfig
+      | SineWaveGeneratorConfig
       | DictionaryGeneratorConfig;
   };
+}
+
+export interface DataStore {
+  sineWave: { [id: string]: { index: number; current: number } };
 }

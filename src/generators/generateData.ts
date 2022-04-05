@@ -5,6 +5,7 @@ import {
   randomInt,
   fixed,
   uuid,
+  sineWave,
 } from './index';
 import {
   GeneratorTypes,
@@ -14,6 +15,7 @@ import {
   DictionaryGeneratorParams,
   FixedValueGeneratorParams,
   GeneratorParams,
+  SineWaveGeneratorParams,
 } from './types';
 
 const invalidType = (x: string): never => {
@@ -40,6 +42,8 @@ export const generateData = ({
       return fixed(params as FixedValueGeneratorParams);
     case 'uuid':
       return uuid();
+    case 'sineWave':
+      return sineWave(params as SineWaveGeneratorParams);
     default:
       return invalidType(type);
   }

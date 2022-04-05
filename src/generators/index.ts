@@ -4,3 +4,4 @@ export { randomFloat } from './random-float';
 export { randomInt } from './random-int';
 export { fixed } from './fixed';
 export { uuid } from './uuid';
+export { sineWave } from './sine-wave';

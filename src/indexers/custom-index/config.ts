@@ -1,8 +1,7 @@
 import { CustomIndexGeneratorConfig } from '../../generators/types';
 
 export const config: CustomIndexGeneratorConfig = {
-  interval: 5000,
-  version: '8.1.3',
+  interval: 1001,
   indexName: 'test-index-8.1.3',
   doc: {
     '@timestamp': { type: 'iso8601' },
@@ -11,5 +10,13 @@ export const config: CustomIndexGeneratorConfig = {
     data_number: { type: 'randomInt', params: { min: 1, max: 5 } },
     data_float: { type: 'randomFloat', params: { min: 1, max: 5 } },
     data_string: { type: 'dictionary', params: { value: 'word' } },
+    data_wave: {
+      type: 'sineWave',
+      params: {
+        min: 0,
+        max: 8,
+        period: 16,
+      },
+    },
   },
 };
