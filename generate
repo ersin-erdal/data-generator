@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+usage() {
+  echo "Commands:"
+  echo "custom_index"
+  echo "metric"
+  exit 1
+}
+
+task_custom_index (){
+  export INDEXER="custom-index"
+  npm start
+}
+
+task_metric (){
+  export INDEXER="metric"
+  npm start
+}
+
+main() {
+  CMD=${1:-}
+  shift || true
+
+  pushd "$DIR" > /dev/null
+
+  if type "task_${CMD}" &> /dev/null; then
+    "task_${CMD}" "$@"
+  else
+    usage
+  fi
+
+  popd > /dev/null
+}
+
+main "$@"

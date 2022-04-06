@@ -14,6 +14,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'implicit-arrow-linebreak': 'off',
+    'comma-dangle': 'off',
   },
   settings: {
     'import/resolver': {

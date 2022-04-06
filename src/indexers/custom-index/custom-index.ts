@@ -1,8 +1,9 @@
 import { Client } from '@elastic/elasticsearch';
 import { Logger } from 'winston';
 import { config } from './config';
-import { generateData } from '../../generators/generateData';
 import { Indexer } from '../../types';
+import { generateDoc } from '../../generators/generateDoc';
+import { validateConfig } from './validateConfig';
 
 export const customIndex: Indexer = ({
   client,
@@ -11,32 +12,13 @@ export const customIndex: Indexer = ({
   client: Client;
   logger: Logger;
 }) => {
-  const validateConfig = () => {
-    if (config.interval < 1000) {
-      throw new Error('Too low interval');
-    }
-  };
-
-  validateConfig();
-
-  const generateDoc = () => {
-    const data: { [key: string]: any } = {};
-
-    Object.entries(config.doc).forEach(([key, value]) => {
-      data[key] = generateData({
-        type: value.type,
-        params: value.params,
-      });
-    });
-
-    return data;
-  };
+  validateConfig(config);
 
   let numberOfFailures = 0;
 
   const index = async () => {
     try {
-      const document = generateDoc();
+      const document = generateDoc(config.doc);
       await client.index({
         index: config.indexName,
         document,
@@ -47,6 +29,7 @@ export const customIndex: Indexer = ({
     } catch (e) {
       numberOfFailures += 1;
       logger.error(`Failure (${numberOfFailures})`);
+      logger.info(JSON.stringify(e));
       if (numberOfFailures >= 5) {
         throw new Error('Failing Client');
       } else {

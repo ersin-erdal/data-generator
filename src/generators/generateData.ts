@@ -3,7 +3,6 @@ import {
   iso8601,
   randomFloat,
   randomInt,
-  fixed,
   uuid,
   sineWave,
 } from './index';
@@ -13,23 +12,22 @@ import {
   RandomIntGeneratorParams,
   RandomFloatGeneratorParams,
   DictionaryGeneratorParams,
-  FixedValueGeneratorParams,
   GeneratorParams,
   SineWaveGeneratorParams,
 } from './types';
 
-const invalidType = (x: string): never => {
-  throw new Error(`Invalid dictionary type: ${x}`);
+const invalidType = (gen: string): never => {
+  throw new Error(`Invalid generator type: ${gen}`);
 };
 
 export const generateData = ({
-  type,
+  generatorType,
   params,
 }: {
-  type: GeneratorTypes;
+  generatorType: GeneratorTypes;
   params?: GeneratorParams;
 }) => {
-  switch (type) {
+  switch (generatorType) {
     case 'iso8601':
       return iso8601(params as IsoGeneratorParams);
     case 'randomInt':
@@ -38,13 +36,11 @@ export const generateData = ({
       return randomFloat(params as RandomFloatGeneratorParams);
     case 'dictionary':
       return dictionary(params as DictionaryGeneratorParams);
-    case 'fixed':
-      return fixed(params as FixedValueGeneratorParams);
     case 'uuid':
       return uuid();
     case 'sineWave':
       return sineWave(params as SineWaveGeneratorParams);
     default:
-      return invalidType(type);
+      return invalidType(generatorType);
   }
 };
