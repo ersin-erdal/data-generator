@@ -2,7 +2,7 @@ import { set } from 'lodash';
 import { dataStore } from './dataStore';
 
 function rounder(value: number) {
-  return Math.round(value * 100) / 100;
+  return parseFloat(value.toFixed(4));
 }
 
 export const sineWave = ({

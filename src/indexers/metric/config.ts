@@ -1,5 +1,14 @@
 import { MetricGeneratorConfig } from '../../generators/types';
 
+const sineWave = (min: number, max: number, period: number) => ({
+  generatorType: 'sineWave',
+  params: {
+    min,
+    max,
+    period,
+  },
+});
+
 const doc = {
   '@timestamp': { generatorType: 'iso8601' },
   host: {
@@ -22,22 +31,35 @@ const doc = {
   },
   system: {
     cpu: {
-      total: {
-        pct: {
-          generatorType: 'sineWave',
-          params: {
-            min: 0,
-            max: 1,
-            period: 16,
-          },
-        },
+      nice: {
+        pct: 0,
         norm: {
-          generatorType: 'sineWave',
-          params: {
-            min: 0,
-            max: 8,
-            period: 32,
-          },
+          pct: 0,
+        },
+      },
+      cores: 16,
+      total: {
+        pct: sineWave(0, 1, 16),
+        norm: {
+          pct: sineWave(0, 1, 24),
+        },
+      },
+      user: {
+        norm: {
+          pct: sineWave(0, 1, 24),
+        },
+        pct: sineWave(0, 1, 16),
+      },
+      system: {
+        norm: {
+          pct: sineWave(0, 0.2, 24),
+        },
+        pct: sineWave(0, 0.4, 24),
+      },
+      idle: {
+        pct: sineWave(0, 1, 32),
+        norm: {
+          pct: sineWave(0, 1, 16),
         },
       },
     },
@@ -45,8 +67,8 @@ const doc = {
 };
 
 export const config: MetricGeneratorConfig = {
-  interval: 1000,
-  version: '8.1.3',
+  interval: 5000,
+  version: '8.1.2',
   hosts: [
     {
       id: '1',
