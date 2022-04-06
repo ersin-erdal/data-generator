@@ -27,11 +27,9 @@ export const metric: Indexer = ({
   };
 
   const index = async () => {
-    const { hosts } = config;
+    const { docs } = config;
 
-    const results = await Promise.allSettled(
-      hosts.map((host) => indexADoc(host.doc))
-    );
+    const results = await Promise.allSettled(docs.map((doc) => indexADoc(doc)));
 
     const hasFailingClient = results.some(
       (result) => result.status === 'rejected'

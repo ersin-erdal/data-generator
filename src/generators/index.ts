@@ -4,3 +4,4 @@ export { randomFloat } from './random-float';
 export { randomInt } from './random-int';
 export { uuid } from './uuid';
 export { sineWave } from './sine-wave';
+export { sineWaveConfig } from './lib/sine-wave';

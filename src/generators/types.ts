@@ -57,10 +57,7 @@ export interface CustomIndexGeneratorConfig {
 export interface MetricGeneratorConfig {
   interval: number;
   version: string;
-  hosts: Array<{
-    id: string;
-    doc: Doc;
-  }>;
+  docs: Doc[];
 }
 
 export interface DataStore {
