@@ -6,9 +6,6 @@ function customizer(val: string, key: any) {
   if (key === 'name' && val === 'host-1') {
     return 'host-2';
   }
-  if (key === 'id') {
-    return '2';
-  }
   return undefined;
 }
 
@@ -17,8 +14,8 @@ export const config: MetricGeneratorConfig = {
   version: '8.1.2',
   docs: [
     cpu,
-    memory,
     cloneDeepWith(cpu, customizer),
+    memory,
     cloneDeepWith(memory, customizer),
   ],
 };

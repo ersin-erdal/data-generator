@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+green=`tput setaf 2`
+reset=`tput sgr0`
+
 usage() {
   echo "Commands:"
   echo "custom_index"
@@ -13,6 +16,44 @@ task_custom_index (){
 }
 
 task_metric (){
+
+  metricbeat_version=8.1.2
+  latest_metricbeat="metricbeat-${metricbeat_version}"
+  tar_directory="${latest_metricbeat}-darwin-x86_64"
+  tar_file="${tar_directory}.tar.gz"
+  tar_url="https://artifacts.elastic.co/downloads/beats/metricbeat/${tar_file}"
+  cwd=$(pwd)
+
+  mkdir -p ~/Beats
+  cd ~/Beats
+
+  DIR="metricbeat"
+
+  if [ ! -d "$DIR" ]; then
+     echo "${green}Downloading Metricbeat...${reset}"
+     echo ""
+     curl -L -O "$tar_url"
+     tar xzvf metricbeat-8.1.2-darwin-x86_64.tar.gz
+     mkdir metricbeat && tar xzvf metricbeat-8.1.2-darwin-x86_64.tar.gz -C metricbeat --strip-components 1
+     rm -f "$tar_file"
+     rm -rf "$tar_directory"
+  fi
+
+  cd "$DIR"
+
+  echo "${green}Setting up Kibana...${reset}"
+  ./metricbeat setup -E "output.elasticsearch.hosts=['localhost:9200']" \
+           -E "output.elasticsearch.username=elastic" \
+           -E "output.elasticsearch.password=changeme" \
+           -E "setup.kibana.host=http://localhost:5601" \
+           -E "setup.kibana.username=elastic" \
+           -E "setup.kibana.password=changeme" -e
+
+  echo "${green}Creating Data Stream...${reset}"
+  curl -X PUT -u elastic:changeme "localhost:9200/_data_stream/${latest_metricbeat}?pretty"
+
+  echo "${green}Generating Data${reset}"
+  cd "$cwd"
   export INDEXER="metric"
   npm start
 }
