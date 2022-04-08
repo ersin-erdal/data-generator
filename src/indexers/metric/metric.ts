@@ -20,7 +20,7 @@ export const metric: Indexer = ({
   const indexADoc = async (doc: Doc) => {
     const document = generateDoc(doc);
     await client.index({
-      index: `metricbeat-${config.version}`,
+      index: `metricbeat-${process.env.METRICBEAT_VERSION}`,
       document,
     });
     logger.info(`Doc indexed: ${JSON.stringify(document)}`);

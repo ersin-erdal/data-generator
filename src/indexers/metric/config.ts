@@ -10,8 +10,7 @@ function customizer(val: string, key: any) {
 }
 
 export const config: MetricGeneratorConfig = {
-  interval: 5000,
-  version: '8.1.2',
+  interval: 10000,
   docs: [
     cpu,
     cloneDeepWith(cpu, customizer),

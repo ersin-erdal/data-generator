@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+red=`tput setaf 1`
 green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
 reset=`tput sgr0`
 
 usage() {
@@ -16,21 +19,30 @@ task_custom_index (){
 }
 
 task_metric (){
+  user="elastic"
+  pass="changeme"
+  user_pass="${user}:${pass}"
 
   metricbeat_version=8.1.2
   latest_metricbeat="metricbeat-${metricbeat_version}"
   tar_directory="${latest_metricbeat}-darwin-x86_64"
   tar_file="${tar_directory}.tar.gz"
   tar_url="https://artifacts.elastic.co/downloads/beats/metricbeat/${tar_file}"
-  cwd=$(pwd)
 
+  elastic_host="localhost:9200"
+  kibana_host="localhost:5601"
+  cwd=$(pwd)
+  DIR="metricbeat"
+
+  ######################################################################################################################
+  # Check if Metricbeat is installed. If not, download and extract
+  ######################################################################################################################
   mkdir -p ~/Beats
   cd ~/Beats
 
-  DIR="metricbeat"
-
+  echo "${yellow}Checking Metricbeat${reset}"
   if [ ! -d "$DIR" ]; then
-     echo "${green}Downloading Metricbeat...${reset}"
+     echo "${blue}Downloading Metricbeat...${reset}"
      echo ""
      curl -L -O "$tar_url"
      tar xzvf metricbeat-8.1.2-darwin-x86_64.tar.gz
@@ -38,23 +50,47 @@ task_metric (){
      rm -f "$tar_file"
      rm -rf "$tar_directory"
   fi
+  echo "${green}OK${reset}"
 
-  cd "$DIR"
+  ######################################################################################################################
+  # Check if Kibana is set for Metricbeat. If not, set it up.
+  ######################################################################################################################
+  echo "${yellow}Checking Kibana status${reset}"
+  ilm=$(curl -X GET -s -u "$user_pass" "${elastic_host}/_ilm/policy/metricbeat"  | jq ".status") # Returns "status" only for 404
 
-  echo "${green}Setting up Kibana...${reset}"
-  ./metricbeat setup -E "output.elasticsearch.hosts=['localhost:9200']" \
-           -E "output.elasticsearch.username=elastic" \
-           -E "output.elasticsearch.password=changeme" \
-           -E "setup.kibana.host=http://localhost:5601" \
-           -E "setup.kibana.username=elastic" \
-           -E "setup.kibana.password=changeme" -e
+  if [ "${ilm}" != "null" ]; then
+    cd "$DIR"
 
-  echo "${green}Creating Data Stream...${reset}"
-  curl -X PUT -u elastic:changeme "localhost:9200/_data_stream/${latest_metricbeat}?pretty"
+    echo "${blue}Setting up Kibana...${reset}"
+    ./metricbeat setup -E "output.elasticsearch.hosts=['${elastic_host}']" \
+             -E "output.elasticsearch.username=${user}" \
+             -E "output.elasticsearch.password=${pass}" \
+             -E "setup.kibana.host=${kibana_host}" \
+             -E "setup.kibana.username=${user}" \
+             -E "setup.kibana.password=${pass}" -e
+  fi
+  echo "${green}OK${reset}"
 
+  ######################################################################################################################
+  # Check if Data Stream for metricbeat is created. If not, create.
+  ######################################################################################################################
+  echo "${yellow}Checking Data Stream${reset}"
+  data_stream_url="${elastic_host}/_data_stream/${latest_metricbeat}"
+  data_stream=$(curl -X GET -s -u "$user_pass" $data_stream_url  | jq ".status")
+
+  if [ "${data_stream}" != "null" ]; then
+    echo "${blue}Creating Data Stream...${reset}"
+    curl -X PUT -u -s "$user_pass" "${elastic_host}/_data_stream/${latest_metricbeat}?pretty"
+  fi
+  echo "${green}OK${reset}"
+
+  ######################################################################################################################
+  # Generate and push data.
+  ######################################################################################################################
   echo "${green}Generating Data${reset}"
   cd "$cwd"
   export INDEXER="metric"
+  export METRICBEAT_VERSION=$metricbeat_version
   npm start
 }
 
