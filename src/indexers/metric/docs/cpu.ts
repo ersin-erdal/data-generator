@@ -32,20 +32,20 @@ export const cpu = {
       total: {
         pct: sineWaveConfig(0, 1, 16),
         norm: {
-          pct: sineWaveConfig(0, 1, 24),
+          pct: sineWaveConfig(0, 1, 32),
         },
       },
       user: {
         norm: {
-          pct: sineWaveConfig(0, 1, 24),
+          pct: sineWaveConfig(0, 1, 32),
         },
         pct: sineWaveConfig(0, 1, 16),
       },
       system: {
         norm: {
-          pct: sineWaveConfig(0, 0.2, 24),
+          pct: sineWaveConfig(0, 1, 32),
         },
-        pct: sineWaveConfig(0, 0.4, 24),
+        pct: sineWaveConfig(0, 1, 16),
       },
       idle: {
         pct: sineWaveConfig(0, 1, 32),

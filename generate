@@ -24,18 +24,18 @@ task_metric (){
   user_pass="${user}:${pass}"
 
   metricbeat_version=8.1.2
-  latest_metricbeat="metricbeat-${metricbeat_version}"
-  tar_directory="${latest_metricbeat}-darwin-x86_64"
+  metricbeat="metricbeat-${metricbeat_version}"
+  tar_directory="${metricbeat}-darwin-x86_64"
   tar_file="${tar_directory}.tar.gz"
   tar_url="https://artifacts.elastic.co/downloads/beats/metricbeat/${tar_file}"
 
   elastic_host="localhost:9200"
   kibana_host="localhost:5601"
   cwd=$(pwd)
-  DIR="metricbeat"
+  DIR="$metricbeat"
 
   ######################################################################################################################
-  # Check if Metricbeat is installed. If not, download and extract
+  # Check if Metricbeat has been installed. If not, download and extract
   ######################################################################################################################
   mkdir -p ~/Beats
   cd ~/Beats
@@ -43,19 +43,18 @@ task_metric (){
   echo "${yellow}Checking Metricbeat${reset}"
   if [ ! -d "$DIR" ]; then
      echo "${blue}Downloading Metricbeat...${reset}"
-     echo ""
      curl -L -O "$tar_url"
      tar xzvf metricbeat-8.1.2-darwin-x86_64.tar.gz
-     mkdir metricbeat && tar xzvf metricbeat-8.1.2-darwin-x86_64.tar.gz -C metricbeat --strip-components 1
+     mkdir "$DIR" && tar xzvf "$tar_file" -C "$DIR" --strip-components 1
      rm -f "$tar_file"
      rm -rf "$tar_directory"
   fi
   echo "${green}OK${reset}"
 
   ######################################################################################################################
-  # Check if Kibana is set for Metricbeat. If not, set it up.
+  # Check if Kibana has been set for Metricbeat. If not, set it up.
   ######################################################################################################################
-  echo "${yellow}Checking Kibana status${reset}"
+  echo "${yellow}Checking Kibana${reset}"
   ilm=$(curl -X GET -s -u "$user_pass" "${elastic_host}/_ilm/policy/metricbeat"  | jq ".status") # Returns "status" only for 404
 
   if [ "${ilm}" != "null" ]; then
@@ -72,15 +71,15 @@ task_metric (){
   echo "${green}OK${reset}"
 
   ######################################################################################################################
-  # Check if Data Stream for metricbeat is created. If not, create.
+  # Check if Data Stream for metricbeat has been created. If not, create.
   ######################################################################################################################
   echo "${yellow}Checking Data Stream${reset}"
-  data_stream_url="${elastic_host}/_data_stream/${latest_metricbeat}"
+  data_stream_url="${elastic_host}/_data_stream/${metricbeat}"
   data_stream=$(curl -X GET -s -u "$user_pass" $data_stream_url  | jq ".status")
 
   if [ "${data_stream}" != "null" ]; then
     echo "${blue}Creating Data Stream...${reset}"
-    curl -X PUT -u -s "$user_pass" "${elastic_host}/_data_stream/${latest_metricbeat}?pretty"
+    curl -X PUT -s -u "$user_pass" "${elastic_host}/_data_stream/${metricbeat}" > /dev/null
   fi
   echo "${green}OK${reset}"
 
@@ -98,15 +97,11 @@ main() {
   CMD=${1:-}
   shift || true
 
-  pushd "$DIR" > /dev/null
-
   if type "task_${CMD}" &> /dev/null; then
     "task_${CMD}" "$@"
   else
     usage
   fi
-
-  popd > /dev/null
 }
 
 main "$@"
