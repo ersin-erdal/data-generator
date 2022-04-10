@@ -15,7 +15,10 @@ export const system = {
     file: {
       path: '/var/log/system.log',
     },
-    offset: { generatorType: 'randomInt', params: { min: 1, max: 50 } },
+    offset: {
+      generatorType: 'increment',
+      params: { id: 1, start: 0, incrementBy: 71 },
+    },
   },
   fileset: {
     name: 'syslog',

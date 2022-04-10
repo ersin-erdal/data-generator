@@ -1,3 +1,3 @@
 import { DataStore } from './types';
 
-export const dataStore: DataStore = { sineWave: {} };
+export const dataStore: DataStore = { sineWave: {}, increment: {} };

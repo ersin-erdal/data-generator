@@ -27,6 +27,13 @@ export interface SineWaveGeneratorParams {
   period: number;
 }
 
+// increment ##########################################################
+export interface IncrementGeneratorParams {
+  start: number;
+  incrementBy: number;
+  id: number;
+}
+
 // ################################################################
 
 export type GeneratorTypes =
@@ -35,6 +42,7 @@ export type GeneratorTypes =
   | 'iso8601'
   | 'randomInt'
   | 'randomFloat'
+  | 'increment'
   | 'sineWave';
 
 export type GeneratorParams =
@@ -42,6 +50,7 @@ export type GeneratorParams =
   | RandomIntGeneratorParams
   | RandomFloatGeneratorParams
   | DictionaryGeneratorParams
+  | IncrementGeneratorParams
   | SineWaveGeneratorParams;
 
 export interface Doc {
@@ -66,4 +75,5 @@ export interface MetricGeneratorConfig {
 
 export interface DataStore {
   sineWave: { [id: string]: { index: number; current: number } };
+  increment: { [id: string]: { lastValue: number } };
 }

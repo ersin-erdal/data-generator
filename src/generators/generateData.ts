@@ -5,6 +5,7 @@ import {
   randomInt,
   uuid,
   sineWave,
+  increment,
 } from './index';
 import {
   GeneratorTypes,
@@ -14,6 +15,7 @@ import {
   DictionaryGeneratorParams,
   GeneratorParams,
   SineWaveGeneratorParams,
+  IncrementGeneratorParams,
 } from './types';
 
 const invalidType = (gen: string): never => {
@@ -40,6 +42,8 @@ export const generateData = ({
       return uuid();
     case 'sineWave':
       return sineWave(params as SineWaveGeneratorParams);
+    case 'increment':
+      return increment(params as IncrementGeneratorParams);
     default:
       return invalidType(generatorType);
   }
