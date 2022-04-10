@@ -1,0 +1,77 @@
+{
+  "@timestamp": { "generatorType": "iso8601" },
+  "host": {
+    "id": "1",
+    "name": "host-1",
+    "cpu": {
+      "usage": {
+        "generatorType": "randomFloat",
+        "params": { "min": 0, "max": 1 }
+      }
+    }
+  },
+  "event": {
+    "dataset": "system.memory",
+    "module": "system"
+  },
+  "metricset": {
+    "period": 10000,
+    "name": "memory"
+  },
+  "service": {
+    "type": "system"
+  },
+  "system": {
+    "memory": {
+      "free": {
+        "generatorType": "sineWave",
+        "params": {
+          "min": 9999999900,
+          "max": 10000000000,
+          "period": 16
+        }
+      },
+      "actual": {
+        "free": 43405434880,
+        "used": {
+          "pct": {
+            "generatorType": "sineWave",
+            "params": {
+              "min": 0.1,
+              "max": 0.2,
+              "period": 8
+            }
+          },
+          "bytes": 25314041856
+        }
+      },
+      "swap": {
+        "total": 1073741824,
+        "used": {
+          "pct": {
+            "generatorType": "sineWave",
+            "params": {
+              "min": 0.1,
+              "max": 0.2,
+              "period": 16
+            }
+          },
+          "bytes": 99090432
+        },
+        "free": 974651392
+      },
+      "total": 68719476736,
+      "used": {
+        "pct": {
+          "generatorType": "sineWave",
+          "params": {
+            "min": 0.1,
+            "max": 0.2,
+            "period": 12
+          }
+        },
+        "bytes": 42695720960
+      }
+    }
+  }
+}

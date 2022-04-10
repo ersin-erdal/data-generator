@@ -4,4 +4,5 @@ export const dataStore: DataStore = {
   sineWave: {},
   increment: {},
   customIndexerDocs: {},
+  metricsDocs: {},
 };

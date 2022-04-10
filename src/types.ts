@@ -11,4 +11,5 @@ export interface DataStore {
   sineWave: { [id: string]: { index: number; current: number } };
   increment: { [id: string]: { lastValue: number } };
   customIndexerDocs: { [id: string]: Doc };
+  metricsDocs: { [id: string]: Doc };
 }

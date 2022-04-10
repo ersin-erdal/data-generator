@@ -70,5 +70,5 @@ export interface CustomIndexGeneratorConfig {
 
 export interface MetricGeneratorConfig {
   interval: number;
-  docs: Doc[];
+  docs: string[];
 }

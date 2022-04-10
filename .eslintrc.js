@@ -15,6 +15,7 @@ module.exports = {
     'import/extensions': 'off',
     'implicit-arrow-linebreak': 'off',
     'comma-dangle': 'off',
+    'function-paren-newline': 'off',
   },
   settings: {
     'import/resolver': {

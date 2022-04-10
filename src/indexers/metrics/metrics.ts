@@ -1,10 +1,13 @@
 import { Client } from '@elastic/elasticsearch';
 import { Logger } from 'winston';
+import { isEmpty } from 'lodash';
 import { Indexer } from '../../types';
 import { config } from './config';
 import { validateConfig } from './validateConfig';
-import { generateDoc } from '../../generators/generateDoc';
-import { Doc } from '../../generators/types';
+import { indexDoc, loadDoc } from '../lib';
+import { dataStore } from '../../dataStore';
+import { loadDocs } from '../lib/loadDocs';
+import { watchDirectory } from '../lib/watchDirectory';
 
 export const metrics: Indexer = ({
   client,
@@ -15,21 +18,38 @@ export const metrics: Indexer = ({
 }) => {
   validateConfig(config);
 
+  const directoryPath = './src/indexers/metrics/docs';
   let numberOfFailures = 0;
 
-  const indexADoc = async (doc: Doc) => {
-    const document = generateDoc(doc);
-    await client.index({
-      index: `metricbeat-${process.env.METRICBEAT_VERSION}`,
-      document,
-    });
-    logger.info(`Doc indexed: ${JSON.stringify(document)}`);
-  };
-
   const index = async () => {
-    const { docs } = config;
+    if (isEmpty(dataStore.metricsDocs)) {
+      loadDocs({
+        docs: config.docs,
+        directoryPath,
+        store: 'metricsDocs',
+      });
+      watchDirectory({
+        directoryPath,
+        logger,
+        callback: (filename) => {
+          dataStore.metricsDocs[filename] = loadDoc({
+            filename,
+            directoryPath,
+          });
+        },
+      });
+    }
 
-    const results = await Promise.allSettled(docs.map((doc) => indexADoc(doc)));
+    const results = await Promise.allSettled(
+      Object.values(dataStore.metricsDocs).map((doc) =>
+        indexDoc({
+          client,
+          logger,
+          doc,
+          index: `metricbeat-${process.env.METRICBEAT_VERSION}`,
+        })
+      )
+    );
 
     const hasFailingClient = results.some(
       (result) => result.status === 'rejected'
@@ -39,6 +59,7 @@ export const metrics: Indexer = ({
     }
 
     if (numberOfFailures >= 5) {
+      logger.error(results);
       throw new Error('Failing Client');
     } else {
       setTimeout(index, config.interval);

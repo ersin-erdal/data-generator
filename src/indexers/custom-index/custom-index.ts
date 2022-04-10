@@ -7,6 +7,7 @@ import { validateConfig } from './validateConfig';
 import { dataStore } from '../../dataStore';
 import { indexDoc, loadDoc } from '../lib';
 import { watchDirectory } from '../lib/watchDirectory';
+import { loadDocs } from '../lib/loadDocs';
 
 export const customIndex: Indexer = ({
   client,
@@ -22,11 +23,10 @@ export const customIndex: Indexer = ({
 
   const index = async () => {
     if (isEmpty(dataStore.customIndexerDocs)) {
-      config.docs.forEach((filename) => {
-        dataStore.customIndexerDocs[filename] = loadDoc({
-          filename,
-          directoryPath,
-        });
+      loadDocs({
+        docs: config.docs,
+        directoryPath,
+        store: 'customIndexerDocs',
       });
       watchDirectory({
         directoryPath,
