@@ -1,8 +1,12 @@
 import { Client } from '@elastic/elasticsearch';
 import { Logger } from 'winston';
+import { isEmpty } from 'lodash';
 import { validateConfig } from './validateConfig';
 import { config } from './config';
-import { generateDoc } from '../../generators/generateDoc';
+import { dataStore } from '../../dataStore';
+import { loadDocs } from '../lib/loadDocs';
+import { watchDirectory } from '../lib/watchDirectory';
+import { indexDoc, loadDoc } from '../lib';
 
 export const logs = ({
   client,
@@ -13,27 +17,51 @@ export const logs = ({
 }) => {
   validateConfig(config);
 
+  const directoryPath = './src/indexers/logs/docs';
   let numberOfFailures = 0;
 
   const index = async () => {
-    try {
-      const document = generateDoc(config.doc);
-      await client.index({
-        index: `filebeat-${process.env.FILEBEAT_VERSION}`,
-        document,
+    if (isEmpty(dataStore.logsDocs)) {
+      loadDocs({
+        docs: config.docs,
+        directoryPath,
+        store: 'logsDocs',
       });
-      numberOfFailures = 0;
-      logger.info(`Doc indexed: ${JSON.stringify(document)}`);
-      setTimeout(index, config.interval);
-    } catch (e) {
+      watchDirectory({
+        directoryPath,
+        logger,
+        callback: (filename) => {
+          dataStore.logsDocs[filename] = loadDoc({
+            filename,
+            directoryPath,
+          });
+        },
+      });
+    }
+
+    const results = await Promise.allSettled(
+      Object.values(dataStore.logsDocs).map((doc) =>
+        indexDoc({
+          client,
+          logger,
+          doc,
+          index: `filebeat-${process.env.FILEBEAT_VERSION}`,
+        })
+      )
+    );
+
+    const hasFailingClient = results.some(
+      (result) => result.status === 'rejected'
+    );
+    if (hasFailingClient) {
       numberOfFailures += 1;
-      logger.error(`Failure (${numberOfFailures})`);
-      logger.info(JSON.stringify(e));
-      if (numberOfFailures >= 5) {
-        throw new Error('Failing Client');
-      } else {
-        setTimeout(index, config.interval);
-      }
+    }
+
+    if (numberOfFailures >= 5) {
+      logger.error(results);
+      throw new Error('Failing Client');
+    } else {
+      setTimeout(index, config.interval);
     }
   };
 

@@ -59,7 +59,7 @@ export interface Doc {
 
 export interface LogGeneratorConfig {
   interval: number;
-  doc: Doc;
+  docs: string[];
 }
 
 export interface CustomIndexGeneratorConfig {

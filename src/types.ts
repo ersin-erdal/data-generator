@@ -12,4 +12,5 @@ export interface DataStore {
   increment: { [id: string]: { lastValue: number } };
   customIndexerDocs: { [id: string]: Doc };
   metricsDocs: { [id: string]: Doc };
+  logsDocs: { [id: string]: Doc };
 }

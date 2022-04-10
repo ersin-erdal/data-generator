@@ -5,4 +5,5 @@ export const dataStore: DataStore = {
   increment: {},
   customIndexerDocs: {},
   metricsDocs: {},
+  logsDocs: {},
 };
