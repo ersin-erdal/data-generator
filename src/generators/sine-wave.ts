@@ -1,5 +1,5 @@
 import { set } from 'lodash';
-import { dataStore } from './dataStore';
+import { dataStore } from '../dataStore';
 
 function rounder(value: number) {
   return parseFloat(value.toFixed(4));

@@ -1,5 +1,5 @@
 import { set, isUndefined } from 'lodash';
-import { dataStore } from './dataStore';
+import { dataStore } from '../dataStore';
 
 export const increment = ({
   start = 0,

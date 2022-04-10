@@ -65,15 +65,10 @@ export interface LogGeneratorConfig {
 export interface CustomIndexGeneratorConfig {
   interval: number;
   indexName: string;
-  doc: Doc;
+  docs: string[];
 }
 
 export interface MetricGeneratorConfig {
   interval: number;
   docs: Doc[];
-}
-
-export interface DataStore {
-  sineWave: { [id: string]: { index: number; current: number } };
-  increment: { [id: string]: { lastValue: number } };
 }
