@@ -48,6 +48,11 @@ export interface Doc {
   [key: string]: unknown;
 }
 
+export interface LogGeneratorConfig {
+  interval: number;
+  doc: Doc;
+}
+
 export interface CustomIndexGeneratorConfig {
   interval: number;
   indexName: string;

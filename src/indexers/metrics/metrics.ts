@@ -6,7 +6,7 @@ import { validateConfig } from './validateConfig';
 import { generateDoc } from '../../generators/generateDoc';
 import { Doc } from '../../generators/types';
 
-export const metric: Indexer = ({
+export const metrics: Indexer = ({
   client,
   logger,
 }: {

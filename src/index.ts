@@ -1,7 +1,6 @@
 import { Client } from '@elastic/elasticsearch';
 import winston from 'winston';
-import { customIndex } from './indexers/custom-index';
-import { metric } from './indexers/metric';
+import { customIndex, metrics, logs } from './indexers';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -31,8 +30,11 @@ switch (indexer) {
   case 'custom-index':
     customIndex({ client, logger }).index();
     break;
-  case 'metric':
-    metric({ client, logger }).index();
+  case 'metrics':
+    metrics({ client, logger }).index();
+    break;
+  case 'logs':
+    logs({ client, logger }).index();
     break;
   default:
     invalidIndexer(indexer);
