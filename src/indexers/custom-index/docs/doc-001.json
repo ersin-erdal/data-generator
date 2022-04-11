@@ -22,6 +22,10 @@
       }
     }
   },
+  "data_increment": {
+    "generatorType": "increment",
+    "params": { "id": "1", "start": 1, "incrementBy": 5 }
+  },
   "data_wave": {
     "generatorType": "sineWave",
     "params": {
