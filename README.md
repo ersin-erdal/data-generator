@@ -2,6 +2,22 @@
 
 This application generates and indexes test data for alerting framework by mimicking Beats. <br>
 
+### Prerequisite:
+- `jq` installed globally `brew install jq`
+- `npm`
+
+### How to Run:
+- `npm install`
+- `./generate {indexer}` indexers: `custom-index`, `metrics`, `logs`
+
+**<span style="color:green">Important :</span>** You can modify or add a new doc during the execution. Each indexer listens for changes in their own `docs` directory! So you can turn an _**active**_ alert into **_recovered_** by changing a value in a doc.
+
+Notes:
+- Elasticsearch and Kibana must be running.
+- It may require you to change `generate` file's permission.  <br>
+  Then run: `sudo chmod 755 'generate'`
+
+### How it works:
 It has two components:  **Indexers** and  **Generators**.
 
 ## Indexers
@@ -57,7 +73,7 @@ There are 7 generators:
    "params": { "id": "1", "start": 1, "incrementBy": 5 }
    }
    ```
-   Output: <br> At each execution, a new integer is returned, starting with `start` and increasing the last number held in memory by `incrementBy`. `id` is used to identify the latest value in memory.
+   Output: <br> At each execution, a new integer is returned, starting with `start` and increasing the last number held in memory by `incrementBy`. `id` is used to identify the latest value in memory. e.g. 1, 6, 11, 16, 21...
    <br><br>
 4. **randomInt** <br>
    Input schema: 
@@ -90,7 +106,7 @@ There are 7 generators:
    Output: A random word from the given dictionary.<br>
    Dictionaries are stored under `src/generators/dictionaries` directory.   <br>
    There are already two dictionaries `word` and `names`.<br>
-   A new dictionary can be simply defined by adding a json file to the dictionay directory and using the file name in the schema.
+   A new dictionary can be simply defined by adding a json file to the dictionay directory and using the file name in the schema. 
    <br><br>
 7. **sineWave** <br>
    Input schema: <br>
@@ -105,20 +121,6 @@ There are 7 generators:
    }
    ```
    Output: <br> At each execution, a new float is returned between `min` and `max` <br>
+   e.g. 3 - 4 - 5 - 6 - 7 - 6 - 5 - 4 - 3 - 2 - 1 - 2 - 3 .....<br>
    For more info about sine wave: https://en.wikipedia.org/wiki/Sine_wave
    <br><br>
-
-## Prerequisite:
-- `jq` installed globally `brew install jq`
-- npm
-
-## How to Run:
-- `npm install`
-- `./generate {indexer}` indexers: `custom-index`, `metrics`, `logs`
-
-**<span style="color:green">Important :</span>** You can modify or add a new doc during the execution. Each indexer listens for changes in their docs directories! So you can turn an _**active**_ alert to **_recovered_** by changing a value in a doc.
-
-Notes: 
-- Elasticsearch and Kibana must be running.
-- It may require you to change `generate` file's permission.  <br>
-Then run: `sudo chmod 755 'generate'`
