@@ -124,3 +124,45 @@ There are 7 generators:
    e.g. 3 - 4 - 5 - 6 - 7 - 6 - 5 - 4 - 3 - 2 - 1 - 2 - 3 .....<br>
    For more info about sine wave: https://en.wikipedia.org/wiki/Sine_wave
    <br><br>
+
+## Sample Data Schema consumed by an Indexer:
+
+```
+{
+  "@timestamp": { "generatorType": "iso8601" },
+  "name": "test-doc",
+  "id": { "generatorType": "uuid" },
+  "data_number": {
+    "generatorType": "randomInt",
+    "params": { "min": 1, "max": 5 }
+  },
+  "data_float": {
+    "generatorType": "randomFloat",
+    "params": { "min": 1, "max": 5 }
+  },
+  "data_string": {
+    "generatorType": "dictionary",
+    "params": { "value": "word" }
+  },
+  "data_nested": {
+    "cpu": {
+      "usage": {
+        "generatorType": "randomFloat",
+        "params": { "min": 1, "max": 5 }
+      }
+    }
+  },
+  "data_increment": {
+    "generatorType": "increment",
+    "params": { "id": "1", "start": 1, "incrementBy": 5 }
+  },
+  "data_wave": {
+    "generatorType": "sineWave",
+    "params": {
+      "min": 0,
+      "max": 8,
+      "period": 16
+    }
+  }
+}
+```
