@@ -2,6 +2,7 @@ import { Client } from '@elastic/elasticsearch';
 import { Logger } from 'winston';
 import { Doc } from '../../generators/types';
 import { generateDoc } from '../../generators/generateDoc';
+import { resetConstantRandomInt } from '../../generators/constant-random-int';
 
 export const indexDoc = async ({
   client,
@@ -19,5 +20,6 @@ export const indexDoc = async ({
     index,
     document,
   });
+  resetConstantRandomInt();
   logger.info(`Doc indexed: ${JSON.stringify(document)}`);
 };

@@ -6,3 +6,4 @@ export { uuid } from './uuid';
 export { sineWave } from './sine-wave';
 export { sineWaveConfig } from './lib/sine-wave';
 export { increment } from './increment';
+export { constantRandomInt } from './constant-random-int';

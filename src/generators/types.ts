@@ -34,6 +34,13 @@ export interface IncrementGeneratorParams {
   id: number;
 }
 
+// constantRandomInt ##########################################################
+export interface ConstantRandomIntGeneratorParams {
+  max: number;
+  min: number;
+  name: string;
+}
+
 // ################################################################
 
 export type GeneratorTypes =
@@ -43,6 +50,7 @@ export type GeneratorTypes =
   | 'randomInt'
   | 'randomFloat'
   | 'increment'
+  | 'constantRandomInt'
   | 'sineWave';
 
 export type GeneratorParams =

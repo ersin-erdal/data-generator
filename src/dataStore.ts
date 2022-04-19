@@ -6,4 +6,5 @@ export const dataStore: DataStore = {
   customIndexerDocs: {},
   metricsDocs: {},
   logsDocs: {},
+  constantRandomInt: {},
 };

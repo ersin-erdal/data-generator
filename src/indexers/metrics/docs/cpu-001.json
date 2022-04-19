@@ -1,8 +1,14 @@
 {
   "@timestamp": { "generatorType": "iso8601" },
   "host": {
-    "id": "1",
-    "name": "host-1",
+    "id": {
+      "generatorType": "constantRandomInt",
+      "params": { "min": 0, "max": 5, "name": "hostId" }
+    },
+    "name": {
+      "generatorType": "constantRandomInt",
+      "params": { "min": 0, "max": 5, "name": "hostId" }
+    },
     "cpu": {
       "usage": {
         "generatorType": "randomFloat",

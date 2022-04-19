@@ -10,6 +10,7 @@ export type Indexer = (params: { client: Client; logger: Logger }) => {
 export interface DataStore {
   sineWave: { [id: string]: { index: number; current: number } };
   increment: { [id: string]: { lastValue: number } };
+  constantRandomInt: { [id: string]: number };
   customIndexerDocs: { [id: string]: Doc };
   metricsDocs: { [id: string]: Doc };
   logsDocs: { [id: string]: Doc };
