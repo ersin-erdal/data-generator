@@ -1,6 +1,6 @@
 import { LogGeneratorConfig } from '../../generators/types';
 
 export const config: LogGeneratorConfig = {
-  interval: 15000,
-  docs: ['system-001.json'],
+  interval: 10000,
+  docs: ['system-001.json', 'system-002.json'],
 };

@@ -1,8 +1,8 @@
 {
   "@timestamp": { "generatorType": "iso8601" },
   "host": {
-    "id": "host-1",
-    "name": "host-1",
+    "id": "host-3",
+    "name": "host-3",
     "cpu": {
       "usage": {
         "generatorType": "randomFloat",
