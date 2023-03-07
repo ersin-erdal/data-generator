@@ -16,10 +16,14 @@ export const indexDoc = async ({
   index: string;
 }) => {
   const document = generateDoc(doc);
-  await client.index({
-    index,
-    document,
-  });
-  resetConstantRandomInt();
-  logger.info(`Doc indexed: ${JSON.stringify(document)}`);
+  try {
+    await client.index({
+      index,
+      document,
+    });
+    resetConstantRandomInt();
+    logger.info(`Doc indexed: ${JSON.stringify(document)}`);
+  } catch (e) {
+    logger.error(`Indexing the Doc: ${JSON.stringify(document)} failed`);
+  }
 };
