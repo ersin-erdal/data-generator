@@ -1,8 +1,8 @@
 {
   "@timestamp": { "generatorType": "iso8601" },
   "host": {
-    "id": "host-1",
-    "name": "host-1",
+    "id": "host-5",
+    "name": "host-5",
     "cpu": {
       "usage": {
         "generatorType": "randomFloat",
@@ -11,7 +11,7 @@
     }
   },
   "netif": {
-    "name": "netif-1"
+    "name": "netif-5"
   },
   "event": {
     "dataset": "system.cpu",
@@ -103,7 +103,7 @@
           }
         },
         "norm": {
-          "pct": 0.9
+          "pct": 0.01
         }
       }
     }

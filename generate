@@ -11,6 +11,8 @@ kibana_host="localhost:5601"
 user="elastic"
 pass="changeme"
 user_pass="${user}:${pass}"
+filebeat_version=8.6.0
+metricbeat_version=8.6.0
 
 usage() {
   echo "Commands:"
@@ -26,7 +28,6 @@ task_custom_index (){
 }
 
 task_logs (){
-  filebeat_version=8.6.0
   filebeat="filebeat-${filebeat_version}"
   tar_directory="${filebeat}-darwin-x86_64"
   tar_file="${tar_directory}.tar.gz"
@@ -95,7 +96,6 @@ task_logs (){
 }
 
 task_metrics (){
-  metricbeat_version=8.6.0
   metricbeat="metricbeat-${metricbeat_version}"
   tar_directory="${metricbeat}-darwin-x86_64"
   tar_file="${tar_directory}.tar.gz"

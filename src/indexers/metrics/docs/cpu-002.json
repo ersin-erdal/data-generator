@@ -10,6 +10,9 @@
       }
     }
   },
+  "netif": {
+    "name": "netif-2"
+  },
   "event": {
     "dataset": "system.cpu",
     "module": "system"
