@@ -9,5 +9,7 @@ export const config: MetricGeneratorConfig = {
     'cpu-004.json',
     'cpu-005.json',
     'cpu-006.json',
-    'memory-001.json']
+    'cpu-007.json',
+    'memory-001.json',
+  ],
 };

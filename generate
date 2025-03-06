@@ -11,8 +11,8 @@ kibana_host="localhost:5601"
 user="elastic"
 pass="changeme"
 user_pass="${user}:${pass}"
-filebeat_version=8.6.0
-metricbeat_version=8.6.0
+filebeat_version=8.17.1
+metricbeat_version=8.17.1
 
 usage() {
   echo "Commands:"
